@@ -1,0 +1,992 @@
+# Generated from src/*.ttl by explorer/scripts/generate-ontology-data.mjs.
+# The source layers remain authoritative.
+
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix uo: <https://uo.karelin.ai/ontology#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+
+
+# ══════════════════ src/abstract.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# uo Domain Ontology — canonical TBox (schema only; instances live elsewhere)
+# Source of truth: the UO/src/*.ttl folder. Edited in Obsidian → proposed back
+# here via obsidian_to_ttl → committed to git.
+# Compiled to consumers (Obsidian, Postgres, etc.) by ontology compiler.
+# Layer = file: abstract.ttl / domain.ttl / vocabulary-*.ttl / properties.ttl
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo: a owl:Ontology ;
+    rdfs:label    "UO Domain Ontology"@en ;
+    rdfs:comment  "Canonical schema for Alex's personal+work knowledge graph."@en ;
+    owl:versionInfo "0.3.0" ;
+    dct:created   "2026-08-21"^^xsd:date .
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Annotation properties
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:abstract a owl:AnnotationProperty ;
+    rdfs:label   "abstract"@en ;
+    rdfs:comment "True when the class is an abstract name — never used as a type: value in frontmatter or in text; concrete subclasses carry the user-facing names."@en .
+
+uo:typeName a owl:AnnotationProperty ;
+    rdfs:label   "type name"@en ;
+    rdfs:comment "The exact type: token and fileClass name for this class, when it differs from the label (e.g. Ontology Entity → OntologyEntity)."@en .
+
+uo:fieldName a owl:AnnotationProperty ;
+    rdfs:label   "field name"@en ;
+    rdfs:comment "The exact Obsidian frontmatter key this property is stored as, when it differs from the snake_cased label (e.g. hasAxis → axis, alternateName → alternateName)."@en .
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Abstract classes
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Entity a owl:Class ;
+    uo:abstract true ;
+    rdfs:label   "Entity"@en ;
+    rdfs:comment "Abstract base class for all named things in the graph."@en .
+
+obo:IAO_0000030 a owl:Class ;
+    uo:typeName "InformationContentEntity" ;
+    uo:abstract true ;
+    rdfs:label   "Information Content Entity"@en ;
+    rdfs:comment "An information artifact that is about something — notes, messages, documents, transcripts, recordings. (IAO Information Content Entity; BFO Generically Dependent Continuant.)"@en .
+
+uo:Ontology a owl:Class ;
+    rdfs:subClassOf skos:Concept, prov:Entity ;
+    rdfs:label   "Ontology"@en ;
+    rdfs:comment "A formal, named namespace of terms (classes and properties) with a canonical IRI prefix."@en .
+
+uo:OntologyEntity a owl:Class ;
+    uo:typeName "OntologyEntity" ;
+    rdfs:subClassOf skos:Concept, prov:Entity ;
+    rdfs:label   "Ontology Entity"@en ;
+    rdfs:comment "A class term defined within a specific Ontology — e.g. Thread, Role, prov:Entity, skos:Concept. Attributes (e.g. phone, participants) are uo:Property, not OntologyEntity. References its parent Ontology via inOntology."@en .
+
+uo:Property a owl:Class ;
+    rdfs:subClassOf skos:Concept, prov:Entity ;
+    rdfs:label   "Property"@en ;
+    rdfs:comment "An attribute or relation defined within an Ontology — e.g. phone, participants, up. Distinct from OntologyEntity (class terms)."@en .
+
+uo:Thread a owl:Class ;
+    rdfs:subClassOf uo:Entity, obo:IAO_0000030, prov:Activity ;
+    uo:abstract true ;
+    rdfs:label   "Thread"@en ;
+    rdfs:comment "Abstract name for a connected sequence of work items — like up/down/prev/next for edges, the abstract name is never used in text or frontmatter; renderings are Project, Epic, Task, Idea, sites visited, etc. Threads are semantic, more like annotations; contrast uo:Activity, which is grounded in real data."@en .
+
+uo:Chain a owl:Class ;
+    owl:equivalentClass uo:Thread ;
+    owl:deprecated true ;
+    rdfs:label   "Chain"@en ;
+    rdfs:comment "Deprecated synonym of Thread (deprecated 2026-07-29)."@en .
+
+uo:Activity a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    rdfs:label   "Activity"@en ;
+    rdfs:comment "A timespan or event on the timeline, based on real data (LLM logs, chats, etc.). Overlaps with Thread but not exactly: Threads are semantic annotations; Activities are real-data timespans."@en .
+
+skos:ConceptScheme a owl:Class ;
+    rdfs:label   "Scheme"@en ;
+    rdfs:comment "A controlled vocabulary: the set of allowed values for a typed frontmatter field. Members are SKOS Concepts that point back via inScheme."@en .
+
+uo:Dimension a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label   "Dimension"@en ;
+    rdfs:comment "A classifier value attached to work items — the value of a dimension field (e.g. Xsolla, AI). A SKOS concept; the vocabularies that hold dimension values are Schemes (skos:ConceptScheme — Axis, Theme, Grouping)."@en .
+
+
+# ══════════════════ src/domain.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Domain classes
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Concept a owl:Class ;
+    rdfs:subClassOf uo:Entity, skos:Concept ;
+    rdfs:label   "Concept"@en ;
+    rdfs:comment "An abstract topic, framework, or domain (e.g. Ontology, Compliance)."@en .
+
+uo:Platform a owl:Class ;
+    rdfs:subClassOf uo:Entity, prov:Entity ;
+    rdfs:label   "Platform"@en ;
+    rdfs:comment "A tool, SaaS service, or piece of infrastructure."@en .
+
+
+# ── People & organisations ──
+
+prov:Person a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    rdfs:label   "Person"@en ;
+    rdfs:comment "A human individual."@en .
+
+prov:Organization a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    rdfs:label   "Org"@en ;
+    rdfs:comment "An organisation (company, team, legal entity)."@en .
+
+prov:Location a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    rdfs:label   "Place"@en ;
+    rdfs:comment "A geographic location (city, office, region)."@en .
+
+uo:Role a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    rdfs:label   "Role"@en ;
+    rdfs:comment "A role someone plays inside an org or project."@en .
+
+
+# ── Work — renderings of Thread ──
+
+uo:Project a owl:Class ;
+    rdfs:subClassOf uo:Entity, uo:Thread ;
+    rdfs:label   "Project"@en ;
+    rdfs:comment "An initiative with status, owner, and one or more axes. (BFO Process; PROV Activity via Thread.)"@en .
+
+uo:Conversation a owl:Class ;
+    rdfs:subClassOf obo:IAO_0000030 ;
+    rdfs:label   "Conversation"@en .
+
+uo:LLMChat a owl:Class ;
+    rdfs:subClassOf uo:Conversation ;
+    rdfs:label   "LLM-Chat"@en .
+
+uo:Task a owl:Class ;
+    rdfs:subClassOf uo:Thread ;
+    rdfs:label   "Task"@en .
+
+uo:Idea a owl:Class ;
+    rdfs:subClassOf uo:Thread ;
+    rdfs:label   "Idea"@en .
+
+uo:Ongoing a owl:Class ;
+    rdfs:subClassOf uo:Entity ;
+    owl:deprecated true ;
+    rdfs:label   "Ongoing"@en ;
+    rdfs:comment "Deprecated page schema; ongoing-ness is lifecycle/status, not schema."@en .
+
+uo:Epic a owl:Class ;
+    rdfs:subClassOf uo:Thread ;
+    rdfs:label   "Epic"@en .
+
+# uo:Dashboard a owl:Class ;
+#     rdfs:subClassOf obo:IAO_0000030 ;
+#     rdfs:label   "Dashboard"@en ;
+#     rdfs:comment "A page whose content is rendered dynamically by a view — frontmatter plus a view reference, no hand-written body."@en .
+
+uo:ProjectFile a owl:Class ;
+    uo:typeName "ProjectFile" ;
+    rdfs:subClassOf obo:IAO_0000030 ;
+    rdfs:label   "Project File"@en ;
+    rdfs:comment "A piece of textual content (notes, sections, attachments) belonging to a Project, Epic, Idea, or Task page, co-located with its parent file."@en .
+
+
+# ── Real-world organisations — an Organization can itself be a Dimension
+#    (filter knowledge related to the organization); their scheme membership is
+#    asserted in vocabulary-axis.ttl / vocabulary-grouping.ttl ──
+
+uo:Xsolla   a prov:Organization ; rdfs:label "Xsolla"@en   ; owl:sameAs wd:Q4053407 .
+uo:TulaCo   a prov:Organization ; rdfs:label "TulaCo"@en .
+uo:SunTrust a prov:Organization ; rdfs:label "SunTrust"@en ; owl:sameAs wd:Q181507 .
+
+
+# ══════════════════ src/vocabulary-axis.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Axis vocabulary — the Scheme and its Dimension values (populated from the
+# `axis:` frontmatter field across the Obsidian vault)
+# Each value is a uo:Dimension and declares its vocabulary via skos:inScheme uo:Axis.
+# An Organization can itself be a Dimension (filter knowledge related to the
+# organization): Xsolla, TulaCo, SunTrust are the prov:Organization individuals
+# declared in domain.ttl, additionally typed uo:Dimension here. Their Grouping
+# membership is asserted in vocabulary-grouping.ttl.
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Axis a skos:ConceptScheme ;
+    rdfs:label   "Axis"@en ;
+    rdfs:comment "Controlled vocabulary of axis dimension-values."@en .
+
+uo:SmartHome a uo:Dimension ; rdfs:label "SmartHome"@en ; skos:notation "SmartHome" ;
+    skos:inScheme uo:Axis .
+uo:Creekview a uo:Dimension ; rdfs:label "Creekview"@en ; skos:notation "Creekview" ;
+    skos:inScheme uo:Axis .
+uo:Data      a uo:Dimension ; rdfs:label "Data"@en      ; skos:notation "Data" ;
+    skos:inScheme uo:Axis .
+uo:AI        a uo:Dimension ; rdfs:label "AI"@en        ; skos:notation "AI" ;
+    skos:inScheme uo:Axis .
+uo:Karelin   a uo:Dimension ; rdfs:label "Karelin"@en   ; skos:notation "Karelin" ;
+    rdfs:comment "Personal/meta axis — Alex Karelin's own domain and cross-cutting work."@en ;
+    skos:inScheme uo:Axis .
+
+# Axis values that are real-world Orgs (declared in domain.ttl)
+uo:Xsolla    a uo:Dimension ; skos:notation "Xsolla" ;
+    skos:inScheme uo:Axis .
+uo:TulaCo    a uo:Dimension ; skos:notation "TulaCo" ;
+    skos:inScheme uo:Axis .
+uo:SunTrust  a uo:Dimension ; skos:notation "Suntrust" ;
+    skos:inScheme uo:Axis .
+
+
+# ══════════════════ src/vocabulary-grouping.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Grouping vocabulary — the Scheme and its values (populated from the
+# KG/Grouping/ instances and the `grouping:` field). Organizations that are
+# also Axis values (Xsolla, TulaCo, SunTrust) are the same IRIs — one concept,
+# member of both schemes.
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Grouping a skos:ConceptScheme ;
+    rdfs:label   "Grouping"@en ;
+    rdfs:comment "Controlled vocabulary of grouping dimension-values (top-level domains projects sit under)."@en .
+
+# Orgs declared in domain.ttl, typed uo:Dimension in vocabulary-axis.ttl
+uo:Xsolla   skos:inScheme uo:Grouping .
+uo:TulaCo   skos:inScheme uo:Grouping .
+uo:SunTrust skos:inScheme uo:Grouping .
+
+uo:Thinking     a uo:Dimension ; rdfs:label "Thinking"@en     ; skos:notation "Thinking" ;
+    skos:inScheme uo:Grouping .
+uo:Productivity a uo:Dimension ; rdfs:label "Productivity"@en ; skos:notation "Productivity" ;
+    skos:inScheme uo:Grouping .
+uo:Work         a uo:Dimension ; rdfs:label "Work"@en         ; skos:notation "Work" ;
+    skos:inScheme uo:Grouping .
+
+
+# ══════════════════ src/vocabulary-process.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Process vocabulary — class only; phase/element values not yet promoted
+# (canonical 7 bold items live in Concepts/Process.md; promote when decided)
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Process a owl:Class ;
+    rdfs:subClassOf skos:ConceptScheme, skos:Concept ;
+    rdfs:label   "Process"@en ;
+    rdfs:comment "A node in a work-lifecycle scheme — phases (Start, Scope, Pre-production, Production, Result) and the entities recognised within them."@en .
+
+
+# ══════════════════ src/vocabulary-source.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Source vocabulary — class and values (backfilled from KG)
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Source a owl:Class ;
+    rdfs:subClassOf skos:ConceptScheme, skos:Concept ;
+    rdfs:label   "Source"@en ;
+    rdfs:comment "Provenance of an entity record — how it was captured into the graph. Closed vocabulary (backfilled from KG source: field)."@en .
+
+uo:SessionIntelSource a uo:Source ; rdfs:label "session-intel"@en ; skos:notation "session-intel" ; skos:inScheme uo:Source .
+uo:AlexSource         a uo:Source ; rdfs:label "alex"@en          ; skos:notation "alex"          ; skos:inScheme uo:Source .
+
+
+# ══════════════════ src/vocabulary-status.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Status vocabulary — class and values (backfilled from KG)
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Status a owl:Class ;
+    rdfs:subClassOf skos:ConceptScheme, skos:Concept ;
+    rdfs:label   "Status"@en ;
+    rdfs:comment "Lifecycle status of a project. Closed vocabulary (backfilled from KG status: field)."@en .
+
+uo:ActiveStatus   a uo:Status ; rdfs:label "active"@en   ; skos:notation "active"   ; skos:inScheme uo:Status .
+uo:ArchivedStatus a uo:Status ; rdfs:label "archived"@en ; skos:notation "archived" ; skos:inScheme uo:Status .
+uo:RetiredStatus     a uo:Status ; rdfs:label "retired"@en     ; skos:notation "retired"     ; skos:inScheme uo:Status .
+uo:SupersededStatus  a uo:Status ; rdfs:label "superseded"@en  ; skos:notation "superseded"  ; skos:inScheme uo:Status .
+
+
+# ══════════════════ src/vocabulary-theme.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Theme vocabulary — the Scheme. Values not yet promoted from prose
+# (canonical list lives in Concepts/Themes.md: Hermes / Inventory and timeline /
+# KDT); promote here when decided.
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:Theme a skos:ConceptScheme ;
+    rdfs:label   "Theme"@en ;
+    rdfs:comment "Controlled vocabulary of theme dimension-values."@en .
+
+
+# ══════════════════ src/voiceinteractive-last-3-memories.ttl ══════════════════
+
+uo:voiceinteractive-memory-import
+  a owl:Ontology ;
+  dct:title "Last three Voice Interactive memory checkpoints"@en ;
+  dct:created "2026-08-21"^^xsd:date ;
+  dct:description "Structured from the available Voice Interactive memory context; not a verbatim transcript. Migrated from the urn:alex:kg: namespace into UO; dictation artefacts resolved (dictated forms noted in comments)."@en ;
+  owl:imports <http://www.w3.org/2004/02/skos/core>,
+              <http://www.w3.org/ns/prov-o>,
+              <http://www.w3.org/2006/time> .
+
+##########
+# Schema — classes and properties not already defined in abstract.ttl /
+# domain.ttl / properties.ttl. Person, Org, Role, ProjectFile, and
+# InformationContentEntity reuse prov:Person, prov:Organization, uo:Role,
+# uo:ProjectFile, obo:IAO_0000030; technology terms reuse uo:Platform.
+##########
+
+uo:MemoryCheckpoint a owl:Class ;
+  rdfs:subClassOf prov:Entity ;
+  rdfs:label "memory checkpoint"@en .
+
+uo:Specification a owl:Class ;
+  rdfs:subClassOf obo:IAO_0000030 ;
+  rdfs:label "specification"@en ;
+  skos:altLabel "spec"@en .
+
+uo:LifecycleEventType a owl:Class ;
+  rdfs:label "lifecycle event type"@en .
+
+uo:LifecycleState a owl:Class ;
+  rdfs:label "lifecycle state"@en .
+
+uo:RoleAssignment a owl:Class ;
+  rdfs:label "role assignment"@en .
+
+uo:Epoch a owl:Class ;
+  rdfs:label "epoch"@en .
+
+uo:JournalSegment a owl:Class ;
+  rdfs:subClassOf obo:IAO_0000030 ;
+  rdfs:label "journal segment"@en .
+
+uo:UndatedEventSet a owl:Class ;
+  rdfs:label "undated event set"@en .
+
+uo:OntologyResearchEpisode a owl:Class ;
+  rdfs:label "ontology research episode"@en .
+
+uo:TemporalLabel a owl:Class ;
+  rdfs:subClassOf skos:Concept ;
+  rdfs:label "temporal label"@en .
+
+uo:Slogan a owl:Class ;
+  rdfs:subClassOf obo:IAO_0000030 ;
+  rdfs:label "slogan"@en .
+
+uo:contains a owl:ObjectProperty ;
+  rdfs:domain uo:MemoryCheckpoint .
+
+uo:assertedIn a owl:ObjectProperty ;
+  rdfs:range uo:MemoryCheckpoint .
+
+uo:hasLifecycleEventType a owl:ObjectProperty ;
+  rdfs:domain obo:IAO_0000030 ;
+  rdfs:range uo:LifecycleEventType .
+
+uo:mayHaveLifecycleState a owl:ObjectProperty ;
+  rdfs:domain obo:IAO_0000030 ;
+  rdfs:range uo:LifecycleState .
+
+uo:person a owl:ObjectProperty ;
+  rdfs:domain uo:RoleAssignment ;
+  rdfs:range prov:Person .
+
+uo:organization a owl:ObjectProperty ;
+  rdfs:domain uo:RoleAssignment ;
+  rdfs:range prov:Organization .
+
+uo:role a owl:ObjectProperty ;
+  rdfs:domain uo:RoleAssignment ;
+  rdfs:range uo:Role .
+
+uo:possibleAliasOf a owl:ObjectProperty ;
+  rdfs:label "possible alias of"@en .
+
+uo:currentName a owl:DatatypeProperty ;
+  rdfs:range xsd:string .
+
+uo:canonicalShortName a owl:DatatypeProperty ;
+  rdfs:range xsd:string .
+
+uo:temporalCoverage a owl:ObjectProperty ;
+  rdfs:range time:ProperInterval .
+
+uo:withinTemporalSpan a owl:ObjectProperty ;
+  rdfs:range time:ProperInterval .
+
+uo:hasAssociatedLabel a owl:ObjectProperty ;
+  rdfs:range uo:TemporalLabel .
+
+uo:intervalStartExclusive a owl:DatatypeProperty ;
+  rdfs:domain time:ProperInterval ;
+  rdfs:range xsd:date .
+
+uo:intervalEndInclusive a owl:DatatypeProperty ;
+  rdfs:domain time:ProperInterval ;
+  rdfs:range xsd:date .
+
+uo:nextTopic a owl:DatatypeProperty ;
+  rdfs:range xsd:string .
+
+uo:uncertainAssertion a owl:DatatypeProperty ;
+  rdfs:range xsd:string .
+
+############################
+# Checkpoint 1 — 02:11 PDT
+############################
+
+uo:checkpoint-2026-08-21T02-11-PDT
+  a uo:MemoryCheckpoint ;
+  dct:title "Glossary Memory Session"@en ;
+  prov:generatedAtTime "2026-08-21T02:11:00-07:00"^^xsd:dateTime ;
+  uo:contains uo:ProjectFile,
+              uo:Created,
+              uo:Curated,
+              uo:Verified,
+              uo:Maintained,
+              uo:Xsolla,
+              uo:TulaCo,
+              uo:Alex,
+              uo:AlexTulacoManagingMember,
+              uo:Axis ;
+  uo:uncertainAssertion "A dictated statement associated person with organization and said that association was not required; its intended predicate or cardinality was not clear enough to formalize."@en .
+
+uo:ProjectFile uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:Created a uo:LifecycleEventType ;
+  skos:prefLabel "created"@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:Curated a uo:LifecycleEventType ;
+  skos:prefLabel "curated"@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:Verified a uo:LifecycleEventType ;
+  skos:prefLabel "verified"@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:Maintained a uo:LifecycleState ;
+  skos:prefLabel "maintained"@en ;
+  rdfs:comment "A lifecycle state for a created or curated information content entity."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+# uo:Xsolla, uo:TulaCo, uo:SunTrust are declared prov:Organization (with their
+# Wikidata owl:sameAs links) in domain.ttl.
+uo:Xsolla skos:prefLabel "Xsolla" ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:TulaCo skos:prefLabel "TulaCo" ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT,
+                uo:checkpoint-2026-08-21T03-57-PDT .
+
+uo:Alex a prov:Person ;
+  uo:canonicalShortName "Alex" ;
+  skos:prefLabel "Alex" ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:ManagingMember a uo:Role ;
+  skos:prefLabel "managing member"@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+uo:AlexTulacoManagingMember a uo:RoleAssignment ;
+  uo:person uo:Alex ;
+  uo:organization uo:TulaCo ;
+  uo:role uo:ManagingMember ;
+  uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+# Dictated as 'accesses'; resolved to the Axis vocabulary term (Axes/Axis).
+# uo:Axis is declared in vocabulary-axis.ttl.
+uo:Axis uo:assertedIn uo:checkpoint-2026-08-21T02-11-PDT .
+
+############################
+# Checkpoint 2 — 03:57 PDT
+############################
+
+uo:checkpoint-2026-08-21T03-57-PDT
+  a uo:MemoryCheckpoint ;
+  dct:title "Knowledge Graph Discussion"@en ;
+  prov:generatedAtTime "2026-08-21T03:57:00-07:00"^^xsd:dateTime ;
+  uo:contains uo:Jira,
+              uo:LangFuse,
+              uo:Manus,
+              uo:n8n,
+              uo:Neo4j,
+              uo:Nginx,
+              uo:Obsidian,
+              uo:Okta,
+              uo:OpenClaw,
+              uo:OPNsense,
+              uo:Portainer,
+              uo:ProductBoard,
+              uo:Redis,
+              uo:TinyAuth,
+              uo:VertexAI,
+              uo:Wireguard,
+              uo:WorkOS,
+              uo:Anthropic,
+              uo:Cloudflare,
+              uo:MerrillLynch,
+              uo:Alphabet,
+              uo:OpenAI,
+              uo:Microsoft,
+              uo:Google,
+              uo:Facebook,
+              uo:TulaCo,
+              uo:SunTrust,
+              uo:Truist,
+              uo:Specification ;
+  uo:nextTopic "epochs" .
+
+uo:Jira a uo:Platform ; skos:prefLabel "Jira" ; owl:sameAs wd:Q1359246 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:LangFuse a uo:Platform ; skos:prefLabel "Langfuse" ;
+  rdfs:comment "Dictated as two fragments: 'Land', 'fuse'. No Wikidata entry as of 2026-08-21."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Manus a uo:Platform ; skos:prefLabel "Manus" ; owl:sameAs wd:Q133102805 ;
+  rdfs:comment "Dictated as 'Anos'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:n8n a uo:Platform ; skos:prefLabel "n8n" ; owl:sameAs wd:Q130305687 ;
+  rdfs:comment "Dictated as 'NA10'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Neo4j a uo:Platform ; skos:prefLabel "Neo4j" ; owl:sameAs wd:Q1628290 ;
+  rdfs:comment "Dictated as 'Neo 4J'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Nginx a uo:Platform ; skos:prefLabel "Nginx" ; owl:sameAs wd:Q306144 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Obsidian a uo:Platform ; skos:prefLabel "Obsidian" ; owl:sameAs wd:Q103994532 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Okta a uo:Platform ; skos:prefLabel "Okta" ; owl:sameAs wd:Q55627388 ;
+  rdfs:comment "Dictated as 'Octa'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:OpenClaw a uo:Platform ; skos:prefLabel "OpenClaw" ; owl:sameAs wd:Q137916205 ;
+  rdfs:comment "Dictated as 'Open Claw'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:OPNsense a uo:Platform ; skos:prefLabel "OPNsense" ; owl:sameAs wd:Q19348696 ;
+  rdfs:comment "Dictated as 'Open Sense'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Portainer a uo:Platform ; skos:prefLabel "Portainer" ; owl:sameAs wd:Q64825554 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:ProductBoard a uo:Platform ; skos:prefLabel "Productboard" ; owl:sameAs wd:Q85817280 ;
+  rdfs:comment "Dictated as 'Product board'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Redis a uo:Platform ; skos:prefLabel "Redis" ; owl:sameAs wd:Q2136322 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:TinyAuth a uo:Platform ; skos:prefLabel "TinyAuth" ;
+  rdfs:comment "No Wikidata entry as of 2026-08-21."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:VertexAI a uo:Platform ; skos:prefLabel "Vertex AI" ; owl:sameAs wd:Q59904785 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Wireguard a uo:Platform ; skos:prefLabel "WireGuard" ; owl:sameAs wd:Q28975568 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:WorkOS a uo:Platform ; skos:prefLabel "WorkOS" ;
+  rdfs:comment "Dictated as 'Work OS'. No Wikidata entry as of 2026-08-21."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+
+uo:Anthropic a prov:Organization ; skos:prefLabel "Anthropic" ; owl:sameAs wd:Q116758847 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Cloudflare a prov:Organization ; skos:prefLabel "Cloudflare" ; owl:sameAs wd:Q4778915 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:MerrillLynch a prov:Organization ; skos:prefLabel "Merrill Lynch" ; owl:sameAs wd:Q334122 ;
+  rdfs:comment "Dictated as 'Mary Blinds' and 'Mary Lynch'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Alphabet a prov:Organization ; skos:prefLabel "Alphabet" ; owl:sameAs wd:Q20800404 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:OpenAI a prov:Organization ; skos:prefLabel "OpenAI" ; owl:sameAs wd:Q21708200 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Microsoft a prov:Organization ; skos:prefLabel "Microsoft" ; owl:sameAs wd:Q2283 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Google a prov:Organization ;
+  skos:prefLabel "Google" ;
+  owl:sameAs wd:Q95 ;
+  uo:possibleAliasOf uo:Alphabet ;
+  rdfs:comment "The dictation said ‘Google or Alphabet’; the relation is intentionally not asserted as identity."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Facebook a prov:Organization ; skos:prefLabel "Facebook" ; owl:sameAs wd:Q380 ;
+  rdfs:comment "Wikidata Q380 is the company, since renamed Meta Platforms."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:SunTrust skos:prefLabel "SunTrust" ;
+  uo:currentName "Truist" ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+uo:Truist a prov:Organization ; skos:prefLabel "Truist" ; owl:sameAs wd:Q795486 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+
+uo:Specification uo:assertedIn uo:checkpoint-2026-08-21T03-57-PDT .
+
+############################
+# Checkpoint 3 — 04:25 PDT
+############################
+
+uo:checkpoint-2026-08-21T04-25-PDT
+  a uo:MemoryCheckpoint ;
+  dct:title "Ontology Term Matching"@en ;
+  prov:generatedAtTime "2026-08-21T04:25:00-07:00"^^xsd:dateTime ;
+  uo:contains uo:Epoch19,
+              uo:Epoch19OntologyResearch,
+              uo:UndatedJournalSegmentAfter2025-12-10Through2026-01-16,
+              uo:UndatedEventsAfter2025-12-10Through2026-01-16,
+              uo:AnnusMirabilis,
+              uo:RecursiveGenerativePrompting,
+              uo:AbsenceOfCrisis .
+
+uo:Epoch19 a uo:Epoch ;
+  skos:prefLabel "Epoch 19"@en ;
+  dct:identifier "19" ;
+  dct:hasPart uo:Epoch19OntologyResearch ;
+  uo:hasAssociatedLabel uo:AnnusMirabilis,
+                        uo:RecursiveGenerativePrompting ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:Epoch19OntologyResearch a uo:OntologyResearchEpisode ;
+  skos:prefLabel "ontology research"@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:IntervalAfter2025-12-10Through2026-01-16
+  a time:ProperInterval ;
+  rdfs:label "after 2025-12-10 through 2026-01-16"@en ;
+  uo:intervalStartExclusive "2025-12-10"^^xsd:date ;
+  uo:intervalEndInclusive "2026-01-16"^^xsd:date ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:UndatedJournalSegmentAfter2025-12-10Through2026-01-16
+  a uo:JournalSegment ;
+  rdfs:label "undated journal segment after 2025-12-10 through 2026-01-16"@en ;
+  uo:temporalCoverage uo:IntervalAfter2025-12-10Through2026-01-16 ;
+  uo:hasAssociatedLabel uo:AnnusMirabilis,
+                        uo:RecursiveGenerativePrompting ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:UndatedEventsAfter2025-12-10Through2026-01-16
+  a uo:UndatedEventSet ;
+  rdfs:label "undated events belonging to the journal interval"@en ;
+  uo:withinTemporalSpan uo:IntervalAfter2025-12-10Through2026-01-16 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:AnnusMirabilis a uo:TemporalLabel ;
+  skos:prefLabel "Annus Mirabilis" ;
+  rdfs:comment "Dictated as 'Anis Mirabilis'."@en ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:RecursiveGenerativePrompting a uo:TemporalLabel ;
+  skos:prefLabel "Recursive generative prompting" ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+uo:AbsenceOfCrisis a uo:Slogan ;
+  rdf:value "Absence of crisis" ;
+  dct:date "2025-12-10"^^xsd:date ;
+  dct:isPartOf uo:Epoch19 ;
+  uo:assertedIn uo:checkpoint-2026-08-21T04-25-PDT .
+
+
+# ══════════════════ src/properties.ttl ══════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Object properties
+# ─────────────────────────────────────────────────────────────────────────────
+
+uo:tags a owl:DatatypeProperty ;
+    rdfs:label   "tags"@en ;
+    rdfs:comment "Free-text keyword tags."@en ;
+    rdfs:domain  uo:Entity ;
+    rdfs:range   xsd:string .
+
+
+uo:description a owl:DatatypeProperty ;
+    uo:fieldName "description" ;
+    rdfs:label   "description"@en ;
+    rdfs:comment "Free-text description of the entity. On ontology term pages it mirrors the term's rdfs:comment and round-trips via sync."@en ;
+    rdfs:domain  uo:Entity ;
+    rdfs:range   xsd:string .
+
+uo:status a owl:ObjectProperty ;
+    rdfs:label   "status"@en ;
+    rdfs:comment "Lifecycle status. Constrained vocabulary (uo:Status)."@en ;
+    rdfs:domain  uo:Entity ;
+    rdfs:range   uo:Status .
+
+
+
+# ── Navigation relations (Breadcrumbs: up/down hierarchy, prev/next sequence) ──
+
+uo:up a owl:ObjectProperty ;
+    rdfs:label    "up"@en ;
+    rdfs:comment  "Hierarchical parent: the broader entity this one sits under."@en ;
+    rdfs:domain   uo:Thread ;
+    rdfs:range    uo:Thread ;
+    owl:inverseOf uo:down .
+
+uo:down a owl:ObjectProperty ;
+    rdfs:label    "down"@en ;
+    rdfs:comment  "Hierarchical child: inverse of up."@en ;
+    rdfs:domain   uo:Thread ;
+    rdfs:range    uo:Thread .
+
+uo:prev a owl:ObjectProperty ;
+    rdfs:label    "prev"@en ;
+    rdfs:comment  "Previous item in a sequence of entities."@en ;
+    rdfs:domain   uo:Thread ;
+    rdfs:range    uo:Thread ;
+    owl:inverseOf uo:next .
+
+uo:next a owl:ObjectProperty ;
+    rdfs:label    "next"@en ;
+    rdfs:comment  "Next item in a sequence of entities: inverse of prev."@en ;
+    rdfs:domain   uo:Thread ;
+    rdfs:range    uo:Thread .
+
+# ── Org / axis relations ──
+
+# uo:org a owl:ObjectProperty ;
+#     rdfs:label   "org"@en ;
+#     rdfs:comment "Organisation a person or Entity belongs to."@en ;
+#     rdfs:domain  prov:Person uo:Entity ;
+#     rdfs:range   prov:Organization .
+
+uo:hasAxis a owl:ObjectProperty ;
+    uo:fieldName "axis" ;
+    rdfs:label   "has axis"@en ;
+    rdfs:comment "Multi-valued. The first item is the primary axis."@en ;
+    rdfs:domain  uo:Entity ;
+    rdfs:range   uo:Dimension .
+
+# uo:primaryAxis a owl:ObjectProperty ;
+#     rdfs:subPropertyOf uo:hasAxis ;
+#     rdfs:label   "primary axis"@en ;
+#     rdfs:comment "The single most relevant axis for this entity."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   uo:Dimension .
+
+uo:hasGrouping a owl:ObjectProperty ;
+    uo:fieldName "grouping" ;
+    rdfs:label   "has grouping"@en ;
+    rdfs:comment "Grouping (top-level domain) this entity belongs to. Constrained vocabulary."@en ;
+    rdfs:domain  uo:Entity ;
+    rdfs:range   uo:Dimension .
+
+# uo:focus a owl:ObjectProperty ;
+#     rdfs:label   "focus"@en ;
+#     rdfs:comment "The real-world entity a classifier/dimension concept refers to — e.g. the Xsolla axis value refers to the uo:Xsolla organisation."@en ;
+#     rdfs:domain  uo:Dimension ;
+#     rdfs:range   uo:Entity .
+
+# uo:source a owl:ObjectProperty ;
+#     rdfs:label   "source"@en ;
+#     rdfs:comment "Provenance of this entity record — how it was captured. Constrained vocabulary."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   uo:Source .
+
+# ── Cross-entity relations (backfilled from KG) ──
+
+# uo:project a owl:ObjectProperty ;
+#     rdfs:label   "project"@en ;
+#     rdfs:comment "A project this entity is associated with."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   uo:Project .
+
+# uo:parent a owl:ObjectProperty ;
+#     rdfs:label   "parent"@en ;
+#     rdfs:comment "Parent entity. (Distinct KG field from up:; not asserted equivalent.)"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   uo:Entity .
+
+# uo:related a owl:ObjectProperty ;
+#     rdfs:label   "related"@en ;
+#     rdfs:comment "A loosely related entity."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   uo:Entity .
+
+# ── Thread / Conversation relations (ingested from vault class edits 2026-06-30) ──
+
+# uo:participants a owl:ObjectProperty ;
+#     rdfs:label   "participants"@en ;
+#     rdfs:domain  uo:Conversation ;
+#     rdfs:range   prov:Person .
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Datatype properties
+# ─────────────────────────────────────────────────────────────────────────────
+
+# uo:priority a owl:DatatypeProperty ;
+#     uo:fieldName "priority" ;
+#     rdfs:label   "priority"@en ;
+#     rdfs:domain  uo:Project ;
+#     rdfs:range   xsd:string .
+
+# uo:generatedBy a owl:DatatypeProperty ;
+#     uo:fieldName "generated_by" ;
+#     rdfs:label   "generated by"@en ;
+#     rdfs:comment "Tool that generated this page. Pages carrying it are safe to regenerate; hand edits belong in frontmatter and round-trip via sync."@en ;
+#     rdfs:domain  obo:IAO_0000030 ;
+#     rdfs:range   xsd:string .
+
+# uo:generatedAt a owl:DatatypeProperty ;
+#     uo:fieldName "generated_at" ;
+#     rdfs:label   "generated at"@en ;
+#     rdfs:comment "Timestamp of the last generation of this page."@en ;
+#     rdfs:domain  obo:IAO_0000030 ;
+#     rdfs:range   xsd:dateTime .
+
+# uo:iri a owl:DatatypeProperty ;
+#     uo:fieldName "iri" ;
+#     rdfs:label   "iri"@en ;
+#     rdfs:comment "Canonical IRI of the ontology term an OntologyEntity page represents."@en ;
+#     rdfs:domain  uo:OntologyEntity ;
+#     rdfs:range   xsd:anyURI .
+
+# uo:role a owl:DatatypeProperty ;
+#     rdfs:label   "role"@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:string .
+
+# uo:alternateName a owl:DatatypeProperty ;
+#     uo:fieldName "alternateName" ;
+#     rdfs:label   "alternate name"@en ;
+#     rdfs:comment "Aliases used in raw data (Slack handles, abbreviations, emails)."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:phoneticName a owl:DatatypeProperty ;
+#     uo:fieldName "phoneticName" ;
+#     rdfs:label   "phonetic name"@en ;
+#     rdfs:comment "Cyrillic/non-ASCII forms STT might emit."@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:string .
+
+# uo:spokenLanguage a owl:DatatypeProperty ;
+#     uo:fieldName "spoken_languages" ;
+#     rdfs:label   "spoken language"@en ;
+#     rdfs:comment "BCP-47 language tag."@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:string .
+
+
+# ── Backfilled from KG (fields used by 2+ instances) ──
+
+# uo:aliases a owl:DatatypeProperty ;
+#     rdfs:label   "aliases"@en ;
+#     rdfs:comment "Alternate names/handles for non-Person entities (KG aliases: field)."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:confidence a owl:DatatypeProperty ;
+#     rdfs:label   "confidence"@en ;
+#     rdfs:comment "Extraction confidence for an auto-captured entity (high/medium/low)."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:sessionCount a owl:DatatypeProperty ;
+#     rdfs:label   "session count"@en ;
+#     rdfs:comment "Number of sessions in which this entity was mentioned."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:integer .
+
+# uo:mentionSessions a owl:DatatypeProperty ;
+#     rdfs:label   "mention sessions"@en ;
+#     rdfs:comment "Identifiers of sessions in which this entity was mentioned."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:email a owl:DatatypeProperty ;
+#     rdfs:label   "email"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:phone a owl:DatatypeProperty ;
+#     rdfs:label   "phone"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:location a owl:DatatypeProperty ;
+#     rdfs:label   "location"@en ;
+#     rdfs:comment "Free-text location string (city, region, country)."@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:address a owl:DatatypeProperty ;
+#     rdfs:label   "address"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:string .
+
+# uo:country a owl:DatatypeProperty ;
+#     rdfs:label   "country"@en ;
+#     rdfs:domain  prov:Location ;
+#     rdfs:range   xsd:string .
+
+# uo:industry a owl:DatatypeProperty ;
+#     rdfs:label   "industry"@en ;
+#     rdfs:comment "Industry sector of an organisation."@en ;
+#     rdfs:domain  prov:Organization ;
+#     rdfs:range   xsd:string .
+
+# uo:startDate a owl:DatatypeProperty ;
+#     uo:fieldName "startDate" ;
+#     rdfs:label   "start date"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:date .
+
+# uo:endDate a owl:DatatypeProperty ;
+#     uo:fieldName "endDate" ;
+#     rdfs:label   "end date"@en ;
+#     rdfs:domain  uo:Entity ;
+#     rdfs:range   xsd:date .
+
+# uo:voiceprintPath a owl:DatatypeProperty ;
+#     rdfs:label   "voiceprint path"@en ;
+#     rdfs:comment "Path to a stored voiceprint sample for speaker recognition."@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:string .
+
+# uo:voiceprintSamples a owl:DatatypeProperty ;
+#     rdfs:label   "voiceprint samples"@en ;
+#     rdfs:comment "Number of voiceprint samples captured."@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:integer .
+
+# uo:indexed a owl:DatatypeProperty ;
+#     rdfs:label   "indexed"@en ;
+#     rdfs:comment "Whether this entity has been indexed by the ingestion pipeline."@en ;
+#     rdfs:domain  prov:Person ;
+#     rdfs:range   xsd:boolean .
+
+# ── Thread / Conversation attributes (ingested from vault class edits 2026-06-30) ──
+
+# uo:conversationMedium a owl:DatatypeProperty ;
+#     rdfs:label   "conversation medium"@en ;
+#     rdfs:domain  uo:Conversation ;
+#     rdfs:range   xsd:string .
+
+# uo:firstMessageDate a owl:DatatypeProperty ;
+#     rdfs:label   "first message date"@en ;
+#     rdfs:domain  uo:LLMChat ;
+#     rdfs:range   xsd:dateTime .
+
+# uo:lastMessageDate a owl:DatatypeProperty ;
+#     rdfs:label   "last message date"@en ;
+#     rdfs:domain  uo:LLMChat ;
+#     rdfs:range   xsd:dateTime .
+
+# uo:model a owl:DatatypeProperty ;
+#     rdfs:label   "model"@en ;
+#     rdfs:domain  uo:LLMChat ;
+#     rdfs:range   xsd:string .
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Temporal validity — reified OWL-Time intervals
+# The usage span of a term or individual is a first-class time:ProperInterval,
+# so it can carry its own facts (precision, source, named era, overlaps).
+# Attach via uo:validInterval. May be applied to an individual (a single value's
+# span) or — via OWL 2 punning — to a class (the span a whole vocabulary was in
+# use). An open-ended span omits time:hasEnd.
+# ─────────────────────────────────────────────────────────────────────────────
+
+# uo:validInterval a owl:ObjectProperty ;
+#     rdfs:subPropertyOf time:hasTime ;
+#     rdfs:label   "valid interval"@en ;
+#     rdfs:comment "The time interval during which this entity or term was in use."@en ;
+#     rdfs:range   time:ProperInterval .

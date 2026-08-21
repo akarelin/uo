@@ -1,0 +1,3256 @@
+{
+  "nodes": [
+    {
+      "id": "https://uo.karelin.ai/ontology#",
+      "label": "UO Domain Ontology",
+      "compactIri": "uo:",
+      "comment": "Canonical schema for Alex's personal+work knowledge graph.",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": [
+        {
+          "predicate": "owl:versionInfo",
+          "value": "0.3.0"
+        },
+        {
+          "predicate": "dct:created",
+          "value": "2026-08-21"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#abstract",
+      "label": "abstract",
+      "compactIri": "uo:abstract",
+      "comment": "True when the class is an abstract name — never used as a type: value in frontmatter or in text; concrete subclasses carry the user-facing names.",
+      "kind": "annotation-property",
+      "types": [
+        "owl:AnnotationProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#typeName",
+      "label": "type name",
+      "compactIri": "uo:typeName",
+      "comment": "The exact type: token and fileClass name for this class, when it differs from the label (e.g. Ontology Entity → OntologyEntity).",
+      "kind": "annotation-property",
+      "types": [
+        "owl:AnnotationProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#fieldName",
+      "label": "field name",
+      "compactIri": "uo:fieldName",
+      "comment": "The exact Obsidian frontmatter key this property is stored as, when it differs from the snake_cased label (e.g. hasAxis → axis, alternateName → alternateName).",
+      "kind": "annotation-property",
+      "types": [
+        "owl:AnnotationProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Entity",
+      "label": "Entity",
+      "compactIri": "uo:Entity",
+      "comment": "Abstract base class for all named things in the graph.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:abstract",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "id": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "label": "Information Content Entity",
+      "compactIri": "obo:IAO_0000030",
+      "comment": "An information artifact that is about something — notes, messages, documents, transcripts, recordings. (IAO Information Content Entity; BFO Generically Dependent Continuant.)",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:typeName",
+          "value": "InformationContentEntity"
+        },
+        {
+          "predicate": "uo:abstract",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Ontology",
+      "label": "Ontology",
+      "compactIri": "uo:Ontology",
+      "comment": "A formal, named namespace of terms (classes and properties) with a canonical IRI prefix.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#OntologyEntity",
+      "label": "Ontology Entity",
+      "compactIri": "uo:OntologyEntity",
+      "comment": "A class term defined within a specific Ontology — e.g. Thread, Role, prov:Entity, skos:Concept. Attributes (e.g. phone, participants) are uo:Property, not OntologyEntity. References its parent Ontology via inOntology.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:typeName",
+          "value": "OntologyEntity"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Property",
+      "label": "Property",
+      "compactIri": "uo:Property",
+      "comment": "An attribute or relation defined within an Ontology — e.g. phone, participants, up. Distinct from OntologyEntity (class terms).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Thread",
+      "label": "Thread",
+      "compactIri": "uo:Thread",
+      "comment": "Abstract name for a connected sequence of work items — like up/down/prev/next for edges, the abstract name is never used in text or frontmatter; renderings are Project, Epic, Task, Idea, sites visited, etc. Threads are semantic, more like annotations; contrast uo:Activity, which is grounded in real data.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:abstract",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Chain",
+      "label": "Chain",
+      "compactIri": "uo:Chain",
+      "comment": "Deprecated synonym of Thread (deprecated 2026-07-29).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "owl:deprecated",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Activity",
+      "label": "Activity",
+      "compactIri": "uo:Activity",
+      "comment": "A timespan or event on the timeline, based on real data (LLM logs, chats, etc.). Overlaps with Thread but not exactly: Threads are semantic annotations; Activities are real-data timespans.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "label": "Scheme",
+      "compactIri": "skos:ConceptScheme",
+      "comment": "A controlled vocabulary: the set of allowed values for a typed frontmatter field. Members are SKOS Concepts that point back via inScheme.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Dimension",
+      "label": "Dimension",
+      "compactIri": "uo:Dimension",
+      "comment": "A classifier value attached to work items — the value of a dimension field (e.g. Xsolla, AI). A SKOS concept; the vocabularies that hold dimension values are Schemes (skos:ConceptScheme — Axis, Theme, Grouping).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Concept",
+      "label": "Concept",
+      "compactIri": "uo:Concept",
+      "comment": "An abstract topic, framework, or domain (e.g. Ontology, Compliance).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Platform",
+      "label": "Platform",
+      "compactIri": "uo:Platform",
+      "comment": "A tool, SaaS service, or piece of infrastructure.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov#Person",
+      "label": "Person",
+      "compactIri": "prov:Person",
+      "comment": "A human individual.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov#Organization",
+      "label": "Org",
+      "compactIri": "prov:Organization",
+      "comment": "An organisation (company, team, legal entity).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov#Location",
+      "label": "Place",
+      "compactIri": "prov:Location",
+      "comment": "A geographic location (city, office, region).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Role",
+      "label": "Role",
+      "compactIri": "uo:Role",
+      "comment": "A role someone plays inside an org or project.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Project",
+      "label": "Project",
+      "compactIri": "uo:Project",
+      "comment": "An initiative with status, owner, and one or more axes. (BFO Process; PROV Activity via Thread.)",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Conversation",
+      "label": "Conversation",
+      "compactIri": "uo:Conversation",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#LLMChat",
+      "label": "LLM-Chat",
+      "compactIri": "uo:LLMChat",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Task",
+      "label": "Task",
+      "compactIri": "uo:Task",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Idea",
+      "label": "Idea",
+      "compactIri": "uo:Idea",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Ongoing",
+      "label": "Ongoing",
+      "compactIri": "uo:Ongoing",
+      "comment": "Deprecated page schema; ongoing-ness is lifecycle/status, not schema.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "owl:deprecated",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Epic",
+      "label": "Epic",
+      "compactIri": "uo:Epic",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#ProjectFile",
+      "label": "Project File",
+      "compactIri": "uo:ProjectFile",
+      "comment": "A piece of textual content (notes, sections, attachments) belonging to a Project, Epic, Idea, or Task page, co-located with its parent file.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:typeName",
+          "value": "ProjectFile"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Xsolla",
+      "label": "Xsolla",
+      "compactIri": "uo:Xsolla",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "prov:Organization",
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Xsolla"
+        },
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Xsolla"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#TulaCo",
+      "label": "TulaCo",
+      "compactIri": "uo:TulaCo",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "prov:Organization",
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "TulaCo"
+        },
+        {
+          "predicate": "skos:prefLabel",
+          "value": "TulaCo"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#SunTrust",
+      "label": "SunTrust",
+      "compactIri": "uo:SunTrust",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "prov:Organization",
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Suntrust"
+        },
+        {
+          "predicate": "skos:prefLabel",
+          "value": "SunTrust"
+        },
+        {
+          "predicate": "uo:currentName",
+          "value": "Truist"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Axis",
+      "label": "Axis",
+      "compactIri": "uo:Axis",
+      "comment": "Controlled vocabulary of axis dimension-values.",
+      "kind": "scheme",
+      "types": [
+        "skos:ConceptScheme"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#SmartHome",
+      "label": "SmartHome",
+      "compactIri": "uo:SmartHome",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "SmartHome"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Creekview",
+      "label": "Creekview",
+      "compactIri": "uo:Creekview",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Creekview"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Data",
+      "label": "Data",
+      "compactIri": "uo:Data",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Data"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#AI",
+      "label": "AI",
+      "compactIri": "uo:AI",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "AI"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Karelin",
+      "label": "Karelin",
+      "compactIri": "uo:Karelin",
+      "comment": "Personal/meta axis — Alex Karelin's own domain and cross-cutting work.",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Karelin"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Grouping",
+      "label": "Grouping",
+      "compactIri": "uo:Grouping",
+      "comment": "Controlled vocabulary of grouping dimension-values (top-level domains projects sit under).",
+      "kind": "scheme",
+      "types": [
+        "skos:ConceptScheme"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Thinking",
+      "label": "Thinking",
+      "compactIri": "uo:Thinking",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Thinking"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Productivity",
+      "label": "Productivity",
+      "compactIri": "uo:Productivity",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Productivity"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Work",
+      "label": "Work",
+      "compactIri": "uo:Work",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Dimension"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "Work"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Process",
+      "label": "Process",
+      "compactIri": "uo:Process",
+      "comment": "A node in a work-lifecycle scheme — phases (Start, Scope, Pre-production, Production, Result) and the entities recognised within them.",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Source",
+      "label": "Source",
+      "compactIri": "uo:Source",
+      "comment": "Provenance of an entity record — how it was captured into the graph. Closed vocabulary (backfilled from KG source: field).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#SessionIntelSource",
+      "label": "session-intel",
+      "compactIri": "uo:SessionIntelSource",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Source"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "session-intel"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#AlexSource",
+      "label": "alex",
+      "compactIri": "uo:AlexSource",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Source"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "alex"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Status",
+      "label": "Status",
+      "compactIri": "uo:Status",
+      "comment": "Lifecycle status of a project. Closed vocabulary (backfilled from KG status: field).",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#ActiveStatus",
+      "label": "active",
+      "compactIri": "uo:ActiveStatus",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Status"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "active"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#ArchivedStatus",
+      "label": "archived",
+      "compactIri": "uo:ArchivedStatus",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Status"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "archived"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#RetiredStatus",
+      "label": "retired",
+      "compactIri": "uo:RetiredStatus",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Status"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "retired"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#SupersededStatus",
+      "label": "superseded",
+      "compactIri": "uo:SupersededStatus",
+      "comment": "",
+      "kind": "vocabulary",
+      "types": [
+        "uo:Status"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:notation",
+          "value": "superseded"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Theme",
+      "label": "Theme",
+      "compactIri": "uo:Theme",
+      "comment": "Controlled vocabulary of theme dimension-values.",
+      "kind": "scheme",
+      "types": [
+        "skos:ConceptScheme"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#voiceinteractive-memory-import",
+      "label": "voiceinteractive-memory-import",
+      "compactIri": "uo:voiceinteractive-memory-import",
+      "comment": "",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": [
+        {
+          "predicate": "dct:title",
+          "value": "Last three Voice Interactive memory checkpoints"
+        },
+        {
+          "predicate": "dct:created",
+          "value": "2026-08-21"
+        },
+        {
+          "predicate": "dct:description",
+          "value": "Structured from the available Voice Interactive memory context; not a verbatim transcript. Migrated from the urn:alex:kg: namespace into UO; dictation artefacts resolved (dictated forms noted in comments)."
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "label": "memory checkpoint",
+      "compactIri": "uo:MemoryCheckpoint",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Specification",
+      "label": "specification",
+      "compactIri": "uo:Specification",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:altLabel",
+          "value": "spec"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#LifecycleEventType",
+      "label": "lifecycle event type",
+      "compactIri": "uo:LifecycleEventType",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#LifecycleState",
+      "label": "lifecycle state",
+      "compactIri": "uo:LifecycleState",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#RoleAssignment",
+      "label": "role assignment",
+      "compactIri": "uo:RoleAssignment",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Epoch",
+      "label": "epoch",
+      "compactIri": "uo:Epoch",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#JournalSegment",
+      "label": "journal segment",
+      "compactIri": "uo:JournalSegment",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#UndatedEventSet",
+      "label": "undated event set",
+      "compactIri": "uo:UndatedEventSet",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#OntologyResearchEpisode",
+      "label": "ontology research episode",
+      "compactIri": "uo:OntologyResearchEpisode",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#TemporalLabel",
+      "label": "temporal label",
+      "compactIri": "uo:TemporalLabel",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Slogan",
+      "label": "slogan",
+      "compactIri": "uo:Slogan",
+      "comment": "",
+      "kind": "class",
+      "types": [
+        "owl:Class"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#contains",
+      "label": "contains",
+      "compactIri": "uo:contains",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#assertedIn",
+      "label": "assertedIn",
+      "compactIri": "uo:assertedIn",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#hasLifecycleEventType",
+      "label": "hasLifecycleEventType",
+      "compactIri": "uo:hasLifecycleEventType",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#mayHaveLifecycleState",
+      "label": "mayHaveLifecycleState",
+      "compactIri": "uo:mayHaveLifecycleState",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#person",
+      "label": "person",
+      "compactIri": "uo:person",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#organization",
+      "label": "organization",
+      "compactIri": "uo:organization",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#role",
+      "label": "role",
+      "compactIri": "uo:role",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#possibleAliasOf",
+      "label": "possible alias of",
+      "compactIri": "uo:possibleAliasOf",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#currentName",
+      "label": "currentName",
+      "compactIri": "uo:currentName",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#canonicalShortName",
+      "label": "canonicalShortName",
+      "compactIri": "uo:canonicalShortName",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#temporalCoverage",
+      "label": "temporalCoverage",
+      "compactIri": "uo:temporalCoverage",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#withinTemporalSpan",
+      "label": "withinTemporalSpan",
+      "compactIri": "uo:withinTemporalSpan",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#hasAssociatedLabel",
+      "label": "hasAssociatedLabel",
+      "compactIri": "uo:hasAssociatedLabel",
+      "comment": "",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#intervalStartExclusive",
+      "label": "intervalStartExclusive",
+      "compactIri": "uo:intervalStartExclusive",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#intervalEndInclusive",
+      "label": "intervalEndInclusive",
+      "compactIri": "uo:intervalEndInclusive",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#nextTopic",
+      "label": "nextTopic",
+      "compactIri": "uo:nextTopic",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#uncertainAssertion",
+      "label": "uncertainAssertion",
+      "compactIri": "uo:uncertainAssertion",
+      "comment": "",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T02-11-PDT",
+      "label": "checkpoint-2026-08-21T02-11-PDT",
+      "compactIri": "uo:checkpoint-2026-08-21T02-11-PDT",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:MemoryCheckpoint"
+      ],
+      "literals": [
+        {
+          "predicate": "dct:title",
+          "value": "Glossary Memory Session"
+        },
+        {
+          "predicate": "prov:generatedAtTime",
+          "value": "2026-08-21T02:11:00-07:00"
+        },
+        {
+          "predicate": "uo:uncertainAssertion",
+          "value": "A dictated statement associated person with organization and said that association was not required; its intended predicate or cardinality was not clear enough to formalize."
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Created",
+      "label": "Created",
+      "compactIri": "uo:Created",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:LifecycleEventType"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "created"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Curated",
+      "label": "Curated",
+      "compactIri": "uo:Curated",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:LifecycleEventType"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "curated"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Verified",
+      "label": "Verified",
+      "compactIri": "uo:Verified",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:LifecycleEventType"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "verified"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Maintained",
+      "label": "Maintained",
+      "compactIri": "uo:Maintained",
+      "comment": "A lifecycle state for a created or curated information content entity.",
+      "kind": "entity",
+      "types": [
+        "uo:LifecycleState"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "maintained"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Alex",
+      "label": "Alex",
+      "compactIri": "uo:Alex",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Person"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:canonicalShortName",
+          "value": "Alex"
+        },
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Alex"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#ManagingMember",
+      "label": "ManagingMember",
+      "compactIri": "uo:ManagingMember",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Role"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "managing member"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#AlexTulacoManagingMember",
+      "label": "AlexTulacoManagingMember",
+      "compactIri": "uo:AlexTulacoManagingMember",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:RoleAssignment"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T03-57-PDT",
+      "label": "checkpoint-2026-08-21T03-57-PDT",
+      "compactIri": "uo:checkpoint-2026-08-21T03-57-PDT",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:MemoryCheckpoint"
+      ],
+      "literals": [
+        {
+          "predicate": "dct:title",
+          "value": "Knowledge Graph Discussion"
+        },
+        {
+          "predicate": "prov:generatedAtTime",
+          "value": "2026-08-21T03:57:00-07:00"
+        },
+        {
+          "predicate": "uo:nextTopic",
+          "value": "epochs"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Jira",
+      "label": "Jira",
+      "compactIri": "uo:Jira",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Jira"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#LangFuse",
+      "label": "LangFuse",
+      "compactIri": "uo:LangFuse",
+      "comment": "Dictated as two fragments: 'Land', 'fuse'. No Wikidata entry as of 2026-08-21.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Langfuse"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Manus",
+      "label": "Manus",
+      "compactIri": "uo:Manus",
+      "comment": "Dictated as 'Anos'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Manus"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#n8n",
+      "label": "n8n",
+      "compactIri": "uo:n8n",
+      "comment": "Dictated as 'NA10'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "n8n"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Neo4j",
+      "label": "Neo4j",
+      "compactIri": "uo:Neo4j",
+      "comment": "Dictated as 'Neo 4J'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Neo4j"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Nginx",
+      "label": "Nginx",
+      "compactIri": "uo:Nginx",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Nginx"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Obsidian",
+      "label": "Obsidian",
+      "compactIri": "uo:Obsidian",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Obsidian"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Okta",
+      "label": "Okta",
+      "compactIri": "uo:Okta",
+      "comment": "Dictated as 'Octa'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Okta"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#OpenClaw",
+      "label": "OpenClaw",
+      "compactIri": "uo:OpenClaw",
+      "comment": "Dictated as 'Open Claw'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "OpenClaw"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#OPNsense",
+      "label": "OPNsense",
+      "compactIri": "uo:OPNsense",
+      "comment": "Dictated as 'Open Sense'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "OPNsense"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Portainer",
+      "label": "Portainer",
+      "compactIri": "uo:Portainer",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Portainer"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#ProductBoard",
+      "label": "ProductBoard",
+      "compactIri": "uo:ProductBoard",
+      "comment": "Dictated as 'Product board'.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Productboard"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Redis",
+      "label": "Redis",
+      "compactIri": "uo:Redis",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Redis"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#TinyAuth",
+      "label": "TinyAuth",
+      "compactIri": "uo:TinyAuth",
+      "comment": "No Wikidata entry as of 2026-08-21.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "TinyAuth"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#VertexAI",
+      "label": "VertexAI",
+      "compactIri": "uo:VertexAI",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Vertex AI"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Wireguard",
+      "label": "Wireguard",
+      "compactIri": "uo:Wireguard",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "WireGuard"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#WorkOS",
+      "label": "WorkOS",
+      "compactIri": "uo:WorkOS",
+      "comment": "Dictated as 'Work OS'. No Wikidata entry as of 2026-08-21.",
+      "kind": "entity",
+      "types": [
+        "uo:Platform"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "WorkOS"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Anthropic",
+      "label": "Anthropic",
+      "compactIri": "uo:Anthropic",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Anthropic"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Cloudflare",
+      "label": "Cloudflare",
+      "compactIri": "uo:Cloudflare",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Cloudflare"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#MerrillLynch",
+      "label": "MerrillLynch",
+      "compactIri": "uo:MerrillLynch",
+      "comment": "Dictated as 'Mary Blinds' and 'Mary Lynch'.",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Merrill Lynch"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Alphabet",
+      "label": "Alphabet",
+      "compactIri": "uo:Alphabet",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Alphabet"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#OpenAI",
+      "label": "OpenAI",
+      "compactIri": "uo:OpenAI",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "OpenAI"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Microsoft",
+      "label": "Microsoft",
+      "compactIri": "uo:Microsoft",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Microsoft"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Google",
+      "label": "Google",
+      "compactIri": "uo:Google",
+      "comment": "The dictation said ‘Google or Alphabet’; the relation is intentionally not asserted as identity.",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Google"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Facebook",
+      "label": "Facebook",
+      "compactIri": "uo:Facebook",
+      "comment": "Wikidata Q380 is the company, since renamed Meta Platforms.",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Facebook"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Truist",
+      "label": "Truist",
+      "compactIri": "uo:Truist",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "prov:Organization"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Truist"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T04-25-PDT",
+      "label": "checkpoint-2026-08-21T04-25-PDT",
+      "compactIri": "uo:checkpoint-2026-08-21T04-25-PDT",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:MemoryCheckpoint"
+      ],
+      "literals": [
+        {
+          "predicate": "dct:title",
+          "value": "Ontology Term Matching"
+        },
+        {
+          "predicate": "prov:generatedAtTime",
+          "value": "2026-08-21T04:25:00-07:00"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Epoch19",
+      "label": "Epoch19",
+      "compactIri": "uo:Epoch19",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Epoch"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Epoch 19"
+        },
+        {
+          "predicate": "dct:identifier",
+          "value": "19"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#Epoch19OntologyResearch",
+      "label": "Epoch19OntologyResearch",
+      "compactIri": "uo:Epoch19OntologyResearch",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:OntologyResearchEpisode"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "ontology research"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#IntervalAfter2025-12-10Through2026-01-16",
+      "label": "after 2025-12-10 through 2026-01-16",
+      "compactIri": "uo:IntervalAfter2025-12-10Through2026-01-16",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "time:ProperInterval"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:intervalStartExclusive",
+          "value": "2025-12-10"
+        },
+        {
+          "predicate": "uo:intervalEndInclusive",
+          "value": "2026-01-16"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#UndatedJournalSegmentAfter2025-12-10Through2026-01-16",
+      "label": "undated journal segment after 2025-12-10 through 2026-01-16",
+      "compactIri": "uo:UndatedJournalSegmentAfter2025-12-10Through2026-01-16",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:JournalSegment"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#UndatedEventsAfter2025-12-10Through2026-01-16",
+      "label": "undated events belonging to the journal interval",
+      "compactIri": "uo:UndatedEventsAfter2025-12-10Through2026-01-16",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:UndatedEventSet"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#AnnusMirabilis",
+      "label": "AnnusMirabilis",
+      "compactIri": "uo:AnnusMirabilis",
+      "comment": "Dictated as 'Anis Mirabilis'.",
+      "kind": "entity",
+      "types": [
+        "uo:TemporalLabel"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Annus Mirabilis"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#RecursiveGenerativePrompting",
+      "label": "RecursiveGenerativePrompting",
+      "compactIri": "uo:RecursiveGenerativePrompting",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:TemporalLabel"
+      ],
+      "literals": [
+        {
+          "predicate": "skos:prefLabel",
+          "value": "Recursive generative prompting"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#AbsenceOfCrisis",
+      "label": "AbsenceOfCrisis",
+      "compactIri": "uo:AbsenceOfCrisis",
+      "comment": "",
+      "kind": "entity",
+      "types": [
+        "uo:Slogan"
+      ],
+      "literals": [
+        {
+          "predicate": "rdf:value",
+          "value": "Absence of crisis"
+        },
+        {
+          "predicate": "dct:date",
+          "value": "2025-12-10"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#tags",
+      "label": "tags",
+      "compactIri": "uo:tags",
+      "comment": "Free-text keyword tags.",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#description",
+      "label": "description",
+      "compactIri": "uo:description",
+      "comment": "Free-text description of the entity. On ontology term pages it mirrors the term's rdfs:comment and round-trips via sync.",
+      "kind": "datatype-property",
+      "types": [
+        "owl:DatatypeProperty"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:fieldName",
+          "value": "description"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#status",
+      "label": "status",
+      "compactIri": "uo:status",
+      "comment": "Lifecycle status. Constrained vocabulary (uo:Status).",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#up",
+      "label": "up",
+      "compactIri": "uo:up",
+      "comment": "Hierarchical parent: the broader entity this one sits under.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#down",
+      "label": "down",
+      "compactIri": "uo:down",
+      "comment": "Hierarchical child: inverse of up.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#prev",
+      "label": "prev",
+      "compactIri": "uo:prev",
+      "comment": "Previous item in a sequence of entities.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#next",
+      "label": "next",
+      "compactIri": "uo:next",
+      "comment": "Next item in a sequence of entities: inverse of prev.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": []
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#hasAxis",
+      "label": "has axis",
+      "compactIri": "uo:hasAxis",
+      "comment": "Multi-valued. The first item is the primary axis.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:fieldName",
+          "value": "axis"
+        }
+      ]
+    },
+    {
+      "id": "https://uo.karelin.ai/ontology#hasGrouping",
+      "label": "has grouping",
+      "compactIri": "uo:hasGrouping",
+      "comment": "Grouping (top-level domain) this entity belongs to. Constrained vocabulary.",
+      "kind": "object-property",
+      "types": [
+        "owl:ObjectProperty"
+      ],
+      "literals": [
+        {
+          "predicate": "uo:fieldName",
+          "value": "grouping"
+        }
+      ]
+    },
+    {
+      "id": "http://www.w3.org/2004/02/skos/core#Concept",
+      "label": "Concept",
+      "compactIri": "skos:Concept",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov#Entity",
+      "label": "Entity",
+      "compactIri": "prov:Entity",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov#Activity",
+      "label": "Activity",
+      "compactIri": "prov:Activity",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2004/02/skos/core",
+      "label": "skos.rdf",
+      "compactIri": "http://www.w3.org/2004/02/skos/core",
+      "comment": "catalog-v001.xml: imports/skos.rdf",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov-o",
+      "label": "//www.w3.org/ns/prov-o",
+      "compactIri": "http://www.w3.org/ns/prov-o",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2006/time",
+      "label": "time.ttl",
+      "compactIri": "http://www.w3.org/2006/time",
+      "comment": "catalog-v001.xml: imports/time.ttl",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2001/XMLSchema#string",
+      "label": "string",
+      "compactIri": "xsd:string",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2006/time#ProperInterval",
+      "label": "ProperInterval",
+      "compactIri": "time:ProperInterval",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/2001/XMLSchema#date",
+      "label": "date",
+      "compactIri": "xsd:date",
+      "comment": "",
+      "kind": "external",
+      "types": [],
+      "literals": []
+    },
+    {
+      "id": "http://www.w3.org/ns/prov-o#",
+      "label": "prov-o.ttl",
+      "compactIri": "http://www.w3.org/ns/prov-o#",
+      "comment": "catalog-v001.xml: imports/prov-o.ttl",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://purl.org/dc/terms/",
+      "label": "dcterms.ttl",
+      "compactIri": "dct:",
+      "comment": "catalog-v001.xml: imports/dcterms.ttl",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": []
+    },
+    {
+      "id": "http://purl.obolibrary.org/obo/iao.owl",
+      "label": "iao.owl",
+      "compactIri": "obo:iao.owl",
+      "comment": "catalog-v001.xml: imports/iao.owl",
+      "kind": "ontology",
+      "types": [
+        "owl:Ontology"
+      ],
+      "literals": []
+    }
+  ],
+  "links": [
+    {
+      "source": "https://uo.karelin.ai/ontology#Ontology",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Ontology",
+      "target": "http://www.w3.org/ns/prov#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#OntologyEntity",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#OntologyEntity",
+      "target": "http://www.w3.org/ns/prov#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Property",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Property",
+      "target": "http://www.w3.org/ns/prov#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Thread",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Thread",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Thread",
+      "target": "http://www.w3.org/ns/prov#Activity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Chain",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2002/07/owl#equivalentClass",
+      "relation": "equivalent class"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Activity",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Dimension",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Concept",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Concept",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Platform",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Platform",
+      "target": "http://www.w3.org/ns/prov#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Person",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Organization",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Location",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Role",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Project",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Project",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Conversation",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#LLMChat",
+      "target": "https://uo.karelin.ai/ontology#Conversation",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Task",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Idea",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Ongoing",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Epic",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ProjectFile",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Xsolla",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TulaCo",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SunTrust",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Axis",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SmartHome",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SmartHome",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Creekview",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Creekview",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Data",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Data",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AI",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AI",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Karelin",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Karelin",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Xsolla",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Xsolla",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TulaCo",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TulaCo",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SunTrust",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SunTrust",
+      "target": "https://uo.karelin.ai/ontology#Axis",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Grouping",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Xsolla",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TulaCo",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SunTrust",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Thinking",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Thinking",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Productivity",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Productivity",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Work",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Work",
+      "target": "https://uo.karelin.ai/ontology#Grouping",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Process",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Process",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Source",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Source",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SessionIntelSource",
+      "target": "https://uo.karelin.ai/ontology#Source",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SessionIntelSource",
+      "target": "https://uo.karelin.ai/ontology#Source",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AlexSource",
+      "target": "https://uo.karelin.ai/ontology#Source",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AlexSource",
+      "target": "https://uo.karelin.ai/ontology#Source",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Status",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Status",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ActiveStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ActiveStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ArchivedStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ArchivedStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#RetiredStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#RetiredStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SupersededStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#SupersededStatus",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/2004/02/skos/core#inScheme",
+      "relation": "in scheme"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Theme",
+      "target": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#voiceinteractive-memory-import",
+      "target": "http://www.w3.org/2004/02/skos/core",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#voiceinteractive-memory-import",
+      "target": "http://www.w3.org/ns/prov-o",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#voiceinteractive-memory-import",
+      "target": "http://www.w3.org/2006/time",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "target": "http://www.w3.org/ns/prov#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Specification",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#JournalSegment",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TemporalLabel",
+      "target": "http://www.w3.org/2004/02/skos/core#Concept",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Slogan",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#subClassOf",
+      "relation": "subclass of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#contains",
+      "target": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#assertedIn",
+      "target": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasLifecycleEventType",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasLifecycleEventType",
+      "target": "https://uo.karelin.ai/ontology#LifecycleEventType",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#mayHaveLifecycleState",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#mayHaveLifecycleState",
+      "target": "https://uo.karelin.ai/ontology#LifecycleState",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#person",
+      "target": "https://uo.karelin.ai/ontology#RoleAssignment",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#person",
+      "target": "http://www.w3.org/ns/prov#Person",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#organization",
+      "target": "https://uo.karelin.ai/ontology#RoleAssignment",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#organization",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#role",
+      "target": "https://uo.karelin.ai/ontology#RoleAssignment",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#role",
+      "target": "https://uo.karelin.ai/ontology#Role",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#currentName",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#canonicalShortName",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#temporalCoverage",
+      "target": "http://www.w3.org/2006/time#ProperInterval",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#withinTemporalSpan",
+      "target": "http://www.w3.org/2006/time#ProperInterval",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasAssociatedLabel",
+      "target": "https://uo.karelin.ai/ontology#TemporalLabel",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#intervalStartExclusive",
+      "target": "http://www.w3.org/2006/time#ProperInterval",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#intervalStartExclusive",
+      "target": "http://www.w3.org/2001/XMLSchema#date",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#intervalEndInclusive",
+      "target": "http://www.w3.org/2006/time#ProperInterval",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#intervalEndInclusive",
+      "target": "http://www.w3.org/2001/XMLSchema#date",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#nextTopic",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#uncertainAssertion",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T02-11-PDT",
+      "target": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Created",
+      "target": "https://uo.karelin.ai/ontology#LifecycleEventType",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Curated",
+      "target": "https://uo.karelin.ai/ontology#LifecycleEventType",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Verified",
+      "target": "https://uo.karelin.ai/ontology#LifecycleEventType",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Maintained",
+      "target": "https://uo.karelin.ai/ontology#LifecycleState",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Alex",
+      "target": "http://www.w3.org/ns/prov#Person",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ManagingMember",
+      "target": "https://uo.karelin.ai/ontology#Role",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AlexTulacoManagingMember",
+      "target": "https://uo.karelin.ai/ontology#RoleAssignment",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T03-57-PDT",
+      "target": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Jira",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#LangFuse",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Manus",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#n8n",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Neo4j",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Nginx",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Obsidian",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Okta",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#OpenClaw",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#OPNsense",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Portainer",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#ProductBoard",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Redis",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#TinyAuth",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#VertexAI",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Wireguard",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#WorkOS",
+      "target": "https://uo.karelin.ai/ontology#Platform",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Anthropic",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Cloudflare",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#MerrillLynch",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Alphabet",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#OpenAI",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Microsoft",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Google",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Facebook",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Truist",
+      "target": "http://www.w3.org/ns/prov#Organization",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#checkpoint-2026-08-21T04-25-PDT",
+      "target": "https://uo.karelin.ai/ontology#MemoryCheckpoint",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Epoch19",
+      "target": "https://uo.karelin.ai/ontology#Epoch",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#Epoch19OntologyResearch",
+      "target": "https://uo.karelin.ai/ontology#OntologyResearchEpisode",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#UndatedJournalSegmentAfter2025-12-10Through2026-01-16",
+      "target": "https://uo.karelin.ai/ontology#JournalSegment",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#UndatedEventsAfter2025-12-10Through2026-01-16",
+      "target": "https://uo.karelin.ai/ontology#UndatedEventSet",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AnnusMirabilis",
+      "target": "https://uo.karelin.ai/ontology#TemporalLabel",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#RecursiveGenerativePrompting",
+      "target": "https://uo.karelin.ai/ontology#TemporalLabel",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#AbsenceOfCrisis",
+      "target": "https://uo.karelin.ai/ontology#Slogan",
+      "predicate": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+      "relation": "type"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#tags",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#tags",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#description",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#description",
+      "target": "http://www.w3.org/2001/XMLSchema#string",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#status",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#status",
+      "target": "https://uo.karelin.ai/ontology#Status",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#up",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#up",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#up",
+      "target": "https://uo.karelin.ai/ontology#down",
+      "predicate": "http://www.w3.org/2002/07/owl#inverseOf",
+      "relation": "inverse of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#down",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#down",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#prev",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#prev",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#prev",
+      "target": "https://uo.karelin.ai/ontology#next",
+      "predicate": "http://www.w3.org/2002/07/owl#inverseOf",
+      "relation": "inverse of"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#next",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#next",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasAxis",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasAxis",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasGrouping",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "relation": "domain"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#hasGrouping",
+      "target": "https://uo.karelin.ai/ontology#Dimension",
+      "predicate": "http://www.w3.org/2000/01/rdf-schema#range",
+      "relation": "range"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#abstract",
+      "target": "https://uo.karelin.ai/ontology#Entity",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#typeName",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#abstract",
+      "target": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#typeName",
+      "target": "https://uo.karelin.ai/ontology#OntologyEntity",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#abstract",
+      "target": "https://uo.karelin.ai/ontology#Thread",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#typeName",
+      "target": "https://uo.karelin.ai/ontology#ProjectFile",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#fieldName",
+      "target": "https://uo.karelin.ai/ontology#description",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#fieldName",
+      "target": "https://uo.karelin.ai/ontology#hasAxis",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#fieldName",
+      "target": "https://uo.karelin.ai/ontology#hasGrouping",
+      "predicate": "urn:uo-visualization:annotates",
+      "relation": "annotates"
+    },
+    {
+      "source": "http://purl.obolibrary.org/obo/IAO_0000030",
+      "target": "http://purl.obolibrary.org/obo/iao.owl",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+      "target": "http://www.w3.org/2004/02/skos/core",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Person",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Organization",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Location",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2004/02/skos/core#Concept",
+      "target": "http://www.w3.org/2004/02/skos/core",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Entity",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/ns/prov#Activity",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2004/02/skos/core",
+      "target": "http://www.w3.org/2004/02/skos/core",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2006/time",
+      "target": "http://www.w3.org/2006/time",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2006/time#ProperInterval",
+      "target": "http://www.w3.org/2006/time",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "http://www.w3.org/2001/XMLSchema#date",
+      "target": "http://purl.obolibrary.org/obo/iao.owl",
+      "predicate": "urn:uo-visualization:declared-in",
+      "relation": "declared in"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#",
+      "target": "http://www.w3.org/ns/prov-o#",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#",
+      "target": "http://www.w3.org/2004/02/skos/core",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#",
+      "target": "http://www.w3.org/2006/time",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#",
+      "target": "http://purl.org/dc/terms/",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    },
+    {
+      "source": "https://uo.karelin.ai/ontology#",
+      "target": "http://purl.obolibrary.org/obo/iao.owl",
+      "predicate": "http://www.w3.org/2002/07/owl#imports",
+      "relation": "imports"
+    }
+  ],
+  "triples": 590,
+  "title": "UO Domain Ontology",
+  "comment": "Canonical schema for Alex's personal+work knowledge graph.",
+  "version": "0.3.0",
+  "created": "2026-08-21",
+  "sourceFiles": [
+    "abstract.ttl",
+    "domain.ttl",
+    "vocabulary-axis.ttl",
+    "vocabulary-grouping.ttl",
+    "vocabulary-process.ttl",
+    "vocabulary-source.ttl",
+    "vocabulary-status.ttl",
+    "vocabulary-theme.ttl",
+    "voiceinteractive-last-3-memories.ttl",
+    "properties.ttl"
+  ],
+  "imports": [
+    {
+      "iri": "http://www.w3.org/ns/prov-o#",
+      "aliases": [
+        "http://www.w3.org/ns/prov-o#",
+        "http://www.w3.org/ns/prov#"
+      ],
+      "file": "prov-o.ttl"
+    },
+    {
+      "iri": "http://www.w3.org/2004/02/skos/core",
+      "aliases": [
+        "http://www.w3.org/2004/02/skos/core"
+      ],
+      "file": "skos.rdf"
+    },
+    {
+      "iri": "http://www.w3.org/2006/time",
+      "aliases": [
+        "http://www.w3.org/2006/time"
+      ],
+      "file": "time.ttl"
+    },
+    {
+      "iri": "http://purl.org/dc/terms/",
+      "aliases": [
+        "http://purl.org/dc/terms/"
+      ],
+      "file": "dcterms.ttl"
+    },
+    {
+      "iri": "http://purl.obolibrary.org/obo/iao.owl",
+      "aliases": [
+        "http://purl.obolibrary.org/obo/iao.owl"
+      ],
+      "file": "iao.owl"
+    }
+  ]
+}

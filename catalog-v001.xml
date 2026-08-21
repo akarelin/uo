@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog prefer="public" xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <!-- GENERATED — maps import IRIs to local copies (see UO.next/site/build.py). -->
+    <uri name="http://www.w3.org/ns/prov-o#" uri="imports/prov-o.ttl"/>
+    <uri name="http://www.w3.org/ns/prov#" uri="imports/prov-o.ttl"/>
+    <uri name="http://www.w3.org/ns/prov-o" uri="imports/prov-o.ttl"/>
+    <uri name="http://www.w3.org/2004/02/skos/core" uri="imports/skos.rdf"/>
+    <uri name="http://www.w3.org/2006/time" uri="imports/time.ttl"/>
+    <uri name="http://purl.org/dc/terms/" uri="imports/dcterms.ttl"/>
+    <uri name="http://purl.obolibrary.org/obo/iao.owl" uri="imports/iao.owl"/>
+</catalog>
