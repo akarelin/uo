@@ -4,7 +4,7 @@
       "id": "https://uo.karelin.ai/ontology#",
       "label": "UO Domain Ontology",
       "compactIri": "uo:",
-      "comment": "Canonical schema for Alex's personal+work knowledge graph.",
+      "comment": "Canonical schema for Alex knowledge graph.",
       "kind": "ontology",
       "types": [
         "owl:Ontology"
@@ -3200,7 +3200,7 @@
   ],
   "triples": 590,
   "title": "UO Domain Ontology",
-  "comment": "Canonical schema for Alex's personal+work knowledge graph.",
+  "comment": "Canonical schema for Alex knowledge graph.",
   "version": "0.3.0",
   "created": "2026-08-21",
   "sourceFiles": [

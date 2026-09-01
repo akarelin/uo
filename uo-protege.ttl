@@ -18,7 +18,7 @@ prov:Location a owl:Class ;
 uo: a owl:Ontology ;
     rdfs:label "UO Domain Ontology"@en ;
     dct:created "2026-08-21"^^xsd:date ;
-    rdfs:comment "Canonical schema for Alex's personal+work knowledge graph."@en ;
+    rdfs:comment "Canonical schema for Alex knowledge graph."@en ;
     owl:imports obo:iao.owl,
         dct:,
         <http://www.w3.org/2004/02/skos/core>,
