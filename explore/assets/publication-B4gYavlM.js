@@ -1,1 +1,0 @@
-import{i as e,n as t,o as n,r,t as i}from"./styles-CAIanW-p.js";var a=n(e(),1),o=r(),s=t();(0,o.createRoot)(document.getElementById(`root`)).render((0,s.jsx)(a.StrictMode,{children:(0,s.jsx)(i,{})}));
